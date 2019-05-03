@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   		http://www.springframework.org/schema/beans/spring-beans.xsd
+	   		http://www.springframework.org/schema/context
+	   		http://www.springframework.org/schema/context/spring-context.xsd">
+	   		
+	<bean id="rocketmqProduct" class="com.alibaba.rocketmq.client.producer.DefaultMQProducer" 
+			init-method="start" destroy-method="shutdown">
+		<property name="producerGroup" value="producer1"/>
+		<property name="namesrvAddr" value="127.0.0.1:9876"/>
+	</bean>
+	
+	<bean id="consumerImplTest" class="com.bwf.p2p.rocketmq.ConsumerImplTest" />
+	<bean id="rocketmqConsumer" class="com.alibaba.rocketmq.client.consumer.DefaultMQPushConsumer" 
+			init-method="start" destroy-method="shutdown">
+		<property name="consumerGroup" value="concurrent_consumer"/>
+		<property name="namesrvAddr" value="127.0.0.1:9876"/>
+		<property name="messageListener" ref="consumerImplTest"/>
+		<property name="subscription">
+			<map>
+				<entry key="TopicTest">
+					<value>*</value>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	   		
+</beans>

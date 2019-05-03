@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="javacTest" default="compile" basedir=".">
+	<target name="clean" description="删除编译后产生的目录及文件">
+		<delete dir="build" />
+	</target>
+
+	<target name="compile" depends="clean" description="编译源文件">
+		<mkdir dir="build/classes" />
+		<javac srcdir="src" destdir="build/classes" />
+	</target>
+</project>

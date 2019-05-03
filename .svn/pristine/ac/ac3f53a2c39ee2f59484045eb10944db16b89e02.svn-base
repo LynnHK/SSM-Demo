@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc"
+	   xmlns:task="http://www.springframework.org/schema/task"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   		http://www.springframework.org/schema/beans/spring-beans.xsd
+	   		http://www.springframework.org/schema/context
+	   		http://www.springframework.org/schema/context/spring-context.xsd
+	   		http://www.springframework.org/schema/mvc
+	   		http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	   		http://www.springframework.org/schema/task
+	   		http://www.springframework.org/schema/task/spring-task.xsd">
+
+	<context:component-scan base-package="com.bwf.p2p.*" use-default-filters="false">
+    	<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
+	
+	<task:annotation-driven/>
+	
+	<!--使用fastjson解析器作为视图解析器-->
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+            	<property name="supportedMediaTypes">
+            		<list>
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json</value>
+                    </list>
+            	</property>
+            	<!-- <property name="features"> 设置fastjson特性 
+            		<list>
+            			<value>WriteMapNullValue</value> 设置null值也要输出，fastjson默认是关闭的
+            			<value>WriteDateUseDateFormat</value> 设置使用文本方式输出日期，fastjson默认是long
+            			<value>WriteNullNumberAsZero</value>
+            			<value>WriteNullListAsEmpty</value>
+            			<value>WriteNullStringAsEmpty</value>
+            			<value>WriteNullBooleanAsFalse</value>
+           			</list>
+            	</property> -->
+            </bean>
+   		</mvc:message-converters>
+	</mvc:annotation-driven>
+	<mvc:default-servlet-handler/>
+	
+	<!-- 通过mvc:resources设置静态资源，这样servlet就会处理这些静态资源，而不通过控制器 -->
+<!--<mvc:resources location="/*.jsp" mapping="/**.jsp"/>
+    <mvc:resources location="/css/*" mapping="/css/**"/>
+    <mvc:resources location="/js/*" mapping="/js/**"/>
+    <mvc:resources location="/images/*" mapping="/images/**"/>
+    <mvc:resources location="/img/*" mapping="/img/**"/> -->
+    
+	<mvc:interceptors>  
+	    <bean class="com.bwf.p2p.interceptor.CommonWebInterceptor"/>
+	    <mvc:interceptor>
+	    	<mvc:mapping path="/*"/>
+		    <bean class="com.bwf.p2p.interceptor.AnotherInterceptor"/>
+	    </mvc:interceptor>
+	</mvc:interceptors>
+	
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+	 	<property name="prefix" value="/WEB-INF/views/"/> 
+		<property name="suffix" value=".jsp"/> 
+	</bean>
+	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="104857600"/>
+		<property name="maxInMemorySize" value="4096"/>
+		<property name="defaultEncoding" value="UTF-8"/>
+	</bean>
+	
+	<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="10"/>
+		<property name="maxPoolSize" value="50"/>
+		<property name="queueCapacity" value="1000"/>
+		<property name="keepAliveSeconds" value="60"/>
+    </bean>
+
+</beans>

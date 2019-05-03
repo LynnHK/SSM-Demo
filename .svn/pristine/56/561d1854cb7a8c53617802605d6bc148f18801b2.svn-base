@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 	
+<mapper namespace="base">
+	
+	<resultMap id="userDto" type="com.bwf.p2p.dto.UserDto">
+		<id column="T_ID" property="id" />
+		<id column="T_EMAIL" property="email" />
+		<id column="T_EMIAL_STATUS" property="emailStatus" />
+		<id column="T_IDENTITY" property="identity" />
+		<id column="T_INVITEID" property="inviteId" />
+		<id column="T_IP" property="ip" />
+		<id column="T_LOGIN_TIME" property="loginTime" />
+		<id column="T_ONLOCK" property="onLock" />
+		<id column="T_PASSWORD" property="password" />
+		<id column="T_PAY_PASSWORD" property="payPassword" />
+		<id column="T_PAY_PWD_STATUS" property="payPWDStatus" />
+		<id column="T_PHONE" property="mobile" />
+		<id column="T_PHONE_STATUS" property="mobileStatus" />
+		<id column="T_RANDOM_CODE" property="randomStatus" />
+		<id column="T_REALNAME" property="realName" />
+		<id column="T_REALNAME_STATUS" property="realNameStatus" />
+		<id column="T_REGESTER_TIME" property="registerTime" />
+		<id column="T_REMARK" property="remark" />
+		<id column="T_SUM_FRIEND" property="sumFriend" />
+		<id column="T_USER_SECURE" property="userSecure" />
+	</resultMap>
+	
+    <!-- 获取活动信息 -->
+    <select id="getUserByMobile" parameterType="java.lang.String" resultMap="userDto" >
+		SELECT *
+		  FROM T_USER
+		 WHERE T_PHONE = #{mobile}
+    </select>
+    
+</mapper>

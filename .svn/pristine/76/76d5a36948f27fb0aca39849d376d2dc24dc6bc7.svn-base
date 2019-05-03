@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 	
+<mapper namespace="base">
+	
+	<resultMap id="user" type="com.bwf.p2p.dto.DemoDto">
+		<id column="UID" property="id" />
+		<id column="USER_NAME" property="userName" />
+		<id column="PASSWORD" property="password" />
+		<id column="NICK_NAME" property="nickName" />
+		<id column="AGE" property="age" />
+		<id column="SEX" property="sex" />
+		<id column="DEL_FLAG" property="delFlag" />
+		<id column="DATE_CREATED" property="dateCreated" />
+		<id column="CREATED_BY" property="createdBy" />
+		<id column="DATE_UPDATED" property="dateUpdated" />
+		<id column="UPDATED_BY" property="updatedBy" />
+	</resultMap>
+	
+	<sql id="Base_Column_List" >
+        UID, USER_NAME, PASSWORD, NICK_NAME, AGE, SEX, DEL_FLAG, DATE_CREATED, CREATED_BY, DATE_UPDATED, UPDATED_BY
+    </sql>
+    
+    <!-- 获得所有用户 -->
+    <select id="demomapping" resultType="java.lang.Integer"  >
+		SELECT COUNT(*)
+		  FROM USER
+		 WHERE DEL_FLAG = 0
+    </select>
+    
+    <insert id="saveDemoDto" parameterType="java.util.List"  >
+		INSERT INTO USER
+				(USER_NAME,
+				 PASSWORD, 
+				 NICK_NAME, 
+				 AGE, 
+				 SEX, 
+				 DEL_FLAG)
+	    VALUES
+		    <foreach collection ="list" item="demoDto" separator =",">
+		         (#{demoDto.userName},
+		          #{demoDto.password}, 
+		          #{demoDto.nickName},
+		          #{demoDto.age}, 
+		          #{demoDto.sex}, 
+		          #{demoDto.delFlag})
+		    </foreach >
+    </insert>
+    
+</mapper>
